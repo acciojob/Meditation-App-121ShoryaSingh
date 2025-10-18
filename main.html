@@ -1,16 +1,295 @@
 <!DOCTYPE html>
-
-<html>
-
+<html lang="en">
 <head>
-	<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meditation App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+
+        #app {
+            height: 100vh;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 50px;
+        }
+
+        .vid-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .vid-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #time-select {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        #time-select button {
+            padding: 15px 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            color: white;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        #time-select button:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: translateX(5px);
+        }
+
+        .player-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .time-display {
+            font-size: 90px;
+            color: white;
+            font-weight: 300;
+            text-shadow: 2px 2px 20px rgba(0, 0, 0, 0.5);
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .play {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: transparent;
+            border: 8px solid rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .play:hover {
+            border-color: white;
+            transform: scale(1.05);
+        }
+
+        .play svg {
+            width: 60px;
+            height: 60px;
+            fill: white;
+        }
+
+        .sound-picker {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .sound-picker button {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.25);
+            border: 3px solid rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .sound-picker button:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(1.1);
+        }
+
+        .sound-picker button svg {
+            width: 40px;
+            height: 40px;
+            fill: white;
+        }
+
+        .sound-picker button.active {
+            background: rgba(65, 105, 225, 0.6);
+            border-color: rgba(65, 105, 225, 0.9);
+            box-shadow: 0 0 20px rgba(65, 105, 225, 0.5);
+        }
+
+        .sound-picker button:nth-child(2).active {
+            background: rgba(220, 90, 70, 0.6);
+            border-color: rgba(220, 90, 70, 0.9);
+            box-shadow: 0 0 20px rgba(220, 90, 70, 0.5);
+        }
+    </style>
 </head>
-
 <body>
-	<!-- the entire body must be written by student -->
-    <script type="text/javascript" src="./script.js">
-</script>
+    <div id="app">
+        <div class="vid-container">
+            <video loop muted>
+                <source src="./videos/rain.mp4" type="video/mp4">
+            </video>
+        </div>
 
+        <div id="time-select">
+            <button id="smaller-mins" data-time="120">2 Minutes</button>
+            <button id="medium-mins" data-time="300">5 Minutes</button>
+            <button id="long-mins" data-time="600">10 Minutes</button>
+        </div>
+
+        <div class="player-container">
+            <audio class="song" loop>
+                <source src="./sounds/rain.mp3">
+            </audio>
+            
+            <div class="time-display">10:00</div>
+            
+            <button class="play">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                    <path d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"/>
+                </svg>
+            </button>
+
+            <div class="sound-picker">
+                <button data-sound="./sounds/rain.mp3" data-video="./videos/rain.mp4">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path d="M416 128c-.6 0-1.1.2-1.6.2 1.1-5.2 1.6-10.6 1.6-16.2 0-44.2-35.8-80-80-80-24.6 0-46.3 11.3-61 28.8C256.4 24.8 219.3 0 176 0 114.1 0 64 50.1 64 112c0 7.3.8 14.3 2.1 21.2C27.8 145.8 0 181.5 0 224c0 53 43 96 96 96h320c53 0 96-43 96-96s-43-96-96-96zM88 374.2c-12.8 44.4-40 56.4-40 87.7 0 27.7 21.5 50.1 48 50.1s48-22.4 48-50.1c0-31.4-27.2-43.1-40-87.7-2.2-8.1-13.5-8.5-16 0zm160 0c-12.8 44.4-40 56.4-40 87.7 0 27.7 21.5 50.1 48 50.1s48-22.4 48-50.1c0-31.4-27.2-43.1-40-87.7-2.2-8.1-13.5-8.5-16 0zm160 0c-12.8 44.4-40 56.4-40 87.7 0 27.7 21.5 50.1 48 50.1s48-22.4 48-50.1c0-31.4-27.2-43.1-40-87.7-2.2-8.1-13.5-8.5-16 0z"/>
+                    </svg>
+                </button>
+                <button data-sound="./sounds/beach.mp3" data-video="./videos/beach.mp4">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L448 255.1l61.3-91.01c6.3-9.4 6.3-21.6 0-31.1-6.2-9.4-16.7-15.1-27.8-15.1H416V32c0-17.7-14.3-32-32-32h-64c-17.7 0-32 14.3-32 32v85.8H32c-11.2 0-21.6 5.6-27.8 15.1-6.3 9.4-6.3 21.6 0 31.1l61.2 91-61.2 91.1c-6.3 9.4-6.3 21.6 0 31.1 6.2 9.4 16.7 15.1 27.8 15.1h256V480c0 17.7 14.3 32 32 32h64c17.7 0 32-14.3 32-32v-86.8h65.5c11.2 0 21.6-5.6 27.8-15.1 6.3-9.5 6.3-21.7 0-31.1z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const app = document.getElementById('app');
+        const video = document.querySelector('.vid-container video');
+        const audio = document.querySelector('.song');
+        const playButton = document.querySelector('.play');
+        const timeDisplay = document.querySelector('.time-display');
+        const timeButtons = document.querySelectorAll('#time-select button');
+        const soundButtons = document.querySelectorAll('.sound-picker button');
+
+        let duration = 600;
+        let currentTime = duration;
+        let isPlaying = false;
+        let timerInterval = null;
+
+        timeDisplay.textContent = '10:00';
+        soundButtons[0].classList.add('active');
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        function updateDisplay() {
+            timeDisplay.textContent = formatTime(currentTime);
+        }
+
+        playButton.addEventListener('click', () => {
+            if (!isPlaying) {
+                audio.play();
+                video.play();
+                isPlaying = true;
+                playButton.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                        <path d="M144 479H48c-26.5 0-48-21.5-48-48V79c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48zm304-48V79c0-26.5-21.5-48-48-48h-96c-26.5 0-48 21.5-48 48v352c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48z"/>
+                    </svg>
+                `;
+                
+                timerInterval = setInterval(() => {
+                    currentTime--;
+                    updateDisplay();
+                    
+                    if (currentTime <= 0) {
+                        resetTimer();
+                    }
+                }, 1000);
+            } else {
+                audio.pause();
+                video.pause();
+                isPlaying = false;
+                clearInterval(timerInterval);
+                playButton.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                        <path d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"/>
+                    </svg>
+                `;
+            }
+        });
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            audio.pause();
+            video.pause();
+            audio.currentTime = 0;
+            video.currentTime = 0;
+            isPlaying = false;
+            currentTime = duration;
+            updateDisplay();
+            playButton.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                    <path d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"/>
+                </svg>
+            `;
+        }
+
+        timeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                duration = parseInt(button.getAttribute('data-time'));
+                resetTimer();
+            });
+        });
+
+        soundButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const soundSrc = button.getAttribute('data-sound');
+                const videoSrc = button.getAttribute('data-video');
+                
+                soundButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                audio.src = soundSrc;
+                audio.load();
+                
+                video.src = videoSrc;
+                video.load();
+                
+                if (isPlaying) {
+                    audio.play();
+                    video.play();
+                }
+            });
+        });
+    </script>
 </body>
-
 </html>
