@@ -1,295 +1,271 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meditation App</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Arial', sans-serif;
-            overflow: hidden;
-        }
-
-        #app {
-            height: 100vh;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 50px;
-        }
-
-        .vid-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-
-        .vid-container video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        #time-select {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        #time-select button {
-            padding: 15px 30px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid white;
-            color: white;
-            font-size: 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(5px);
-        }
-
-        #time-select button:hover {
-            background: rgba(255, 255, 255, 0.4);
-            transform: translateX(5px);
-        }
-
-        .player-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 40px;
-        }
-
-        .time-display {
-            font-size: 90px;
-            color: white;
-            font-weight: 300;
-            text-shadow: 2px 2px 20px rgba(0, 0, 0, 0.5);
-            font-family: 'Segoe UI', sans-serif;
-        }
-
-        .play {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            background: transparent;
-            border: 8px solid rgba(255, 255, 255, 0.8);
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .play:hover {
-            border-color: white;
-            transform: scale(1.05);
-        }
-
-        .play svg {
-            width: 60px;
-            height: 60px;
-            fill: white;
-        }
-
-        .sound-picker {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-
-        .sound-picker button {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.25);
-            border: 3px solid rgba(255, 255, 255, 0.5);
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(5px);
-        }
-
-        .sound-picker button:hover {
-            background: rgba(255, 255, 255, 0.4);
-            transform: scale(1.1);
-        }
-
-        .sound-picker button svg {
-            width: 40px;
-            height: 40px;
-            fill: white;
-        }
-
-        .sound-picker button.active {
-            background: rgba(65, 105, 225, 0.6);
-            border-color: rgba(65, 105, 225, 0.9);
-            box-shadow: 0 0 20px rgba(65, 105, 225, 0.5);
-        }
-
-        .sound-picker button:nth-child(2).active {
-            background: rgba(220, 90, 70, 0.6);
-            border-color: rgba(220, 90, 70, 0.9);
-            box-shadow: 0 0 20px rgba(220, 90, 70, 0.5);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Meditation App</title>
+  <style>
+    body { margin: 0; background: #222; }
+    #app {
+      width: 100vw;
+      height: 100vh;
+      min-height: 500px;
+      position: relative;
+      overflow: hidden;
+      font-family: sans-serif;
+    }
+    .vid-container {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      overflow: hidden;
+    }
+    .vid-container video {
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      filter: blur(0.5px) brightness(0.98);
+    }
+    #time-select {
+      position: absolute;
+      left: 40px;
+      top: 30%;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    #time-select button {
+      background: transparent;
+      border: 2px solid #fff;
+      color: #fff;
+      padding: 14px 24px;
+      border-radius: 7px;
+      font-size: 20px;
+      margin: 0;
+      cursor: pointer;
+      transition: background 0.20s, color 0.20s;
+    }
+    #time-select button.active, #time-select button:hover {
+      background: #fff;
+      color: #337bfa;
+    }
+    .sound-picker {
+      position: absolute;
+      right: 56px;
+      top: 38%;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 38px;
+    }
+    .sound-picker button {
+      background: #337bfa;
+      border: none;
+      color: #fff;
+      width: 90px; height: 90px;
+      border-radius: 45px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      cursor: pointer;
+      box-shadow: 0 0 8px #0004;
+      transition: background 0.2s;
+    }
+    .sound-picker button.active {
+      background: #dc6630;
+    }
+    .player-container {
+      position: absolute;
+      width: 100vw;
+      top: 50%; left: 0;
+      transform: translateY(-50%);
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .circle-timer {
+      width: 180px; height: 180px;
+      background: rgba(255,255,255,0.06);
+      border: 6px solid #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+      position: relative;
+      cursor: pointer;
+      box-shadow: 0 2px 24px #0003;
+    }
+    .circle-timer svg {
+      position: absolute;
+      left: 0; top: 0;
+      pointer-events: none;
+    }
+    .play {
+      border: none;
+      background: none;
+      color: #337bfa;
+      font-size: 70px;
+      cursor: pointer;
+      margin: 0 auto;
+      z-index: 2;
+      transition: color 0.18s;
+      position:relative;
+    }
+    .time-display {
+      color: #fff;
+      font-size: 32px;
+      font-weight: 600;
+      text-shadow: 0 2px 8px #0007;
+    }
+    .tags {
+      margin: 8px 0 -8px 0; color: #bbb; font-size: 18px;
+    }
+  </style>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css" rel="stylesheet">
 </head>
 <body>
-    <div id="app" class='app'>
-        <div class="vid-container">
-            <video loop muted>
-                <source src="./videos/rain.mp4" type="video/mp4">
-            </video>
-        </div>
-
-        <div id="time-select">
-            <button id="smaller-mins" data-time="120">2 Minutes</button>
-            <button id="medium-mins" data-time="300">5 Minutes</button>
-            <button id="long-mins" data-time="600">10 Minutes</button>
-        </div>
-
-        <div class="player-container">
-            <audio class="song" loop>
-                <source src="./sounds/rain.mp3">
-            </audio>
-            
-            <div class="time-display">10:0</div>
-            
-            <button class="play">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                    <path d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"/>
-                </svg>
-            </button>
-
-            <div class="sound-picker">
-                <button data-sound="./sounds/rain.mp3" data-video="./videos/rain.mp4">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                        <path d="M416 128c-.6 0-1.1.2-1.6.2 1.1-5.2 1.6-10.6 1.6-16.2 0-44.2-35.8-80-80-80-24.6 0-46.3 11.3-61 28.8C256.4 24.8 219.3 0 176 0 114.1 0 64 50.1 64 112c0 7.3.8 14.3 2.1 21.2C27.8 145.8 0 181.5 0 224c0 53 43 96 96 96h320c53 0 96-43 96-96s-43-96-96-96zM88 374.2c-12.8 44.4-40 56.4-40 87.7 0 27.7 21.5 50.1 48 50.1s48-22.4 48-50.1c0-31.4-27.2-43.1-40-87.7-2.2-8.1-13.5-8.5-16 0zm160 0c-12.8 44.4-40 56.4-40 87.7 0 27.7 21.5 50.1 48 50.1s48-22.4 48-50.1c0-31.4-27.2-43.1-40-87.7-2.2-8.1-13.5-8.5-16 0zm160 0c-12.8 44.4-40 56.4-40 87.7 0 27.7 21.5 50.1 48 50.1s48-22.4 48-50.1c0-31.4-27.2-43.1-40-87.7-2.2-8.1-13.5-8.5-16 0z"/>
-                    </svg>
-                </button>
-                <button data-sound="./sounds/beach.mp3" data-video="./videos/beach.mp4">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                        <path d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L448 255.1l61.3-91.01c6.3-9.4 6.3-21.6 0-31.1-6.2-9.4-16.7-15.1-27.8-15.1H416V32c0-17.7-14.3-32-32-32h-64c-17.7 0-32 14.3-32 32v85.8H32c-11.2 0-21.6 5.6-27.8 15.1-6.3 9.4-6.3 21.6 0 31.1l61.2 91-61.2 91.1c-6.3 9.4-6.3 21.6 0 31.1 6.2 9.4 16.7 15.1 27.8 15.1h256V480c0 17.7 14.3 32 32 32h64c17.7 0 32-14.3 32-32v-86.8h65.5c11.2 0 21.6-5.6 27.8-15.1 6.3-9.5 6.3-21.7 0-31.1z"/>
-                    </svg>
-                </button>
-            </div>
-        </div>
+<div id="app">
+  <div class="vid-container">
+    <video id="meditation-video" loop muted autoplay>
+      <source src="video/day.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div id="time-select">
+    <button id="smaller-mins" class="active">2 Minutes</button>
+    <button id="medium-mins">5 Minutes</button>
+    <button id="long-mins">10 Minutes</button>
+  </div>
+  <div class="sound-picker">
+    <button data-theme="day" class="active" title="Day"><i class="ri-sun-line"></i></button>
+    <button data-theme="night" title="Night"><i class="ri-moon-line"></i></button>
+  </div>
+  <div class="player-container">
+    <div class="circle-timer" id="circle-timer">
+      <svg width="180" height="180">
+        <circle id="progress" r="80" cx="90" cy="90" stroke="#337bfa" stroke-width="7" fill="none"
+                stroke-dasharray="502" stroke-dashoffset="502" />
+      </svg>
+      <button class="play" id="play-pause"><i class="ri-play-fill"></i></button>
     </div>
+    <audio id="meditation-audio" src="Sounds/day.mp3"></audio>
+    <div class="tags" id="tags">Now Playing: Day</div>
+    <div class="time-display" id="time-display">2:00</div>
+  </div>
+</div>
+<script>
+  // Elements
+  const video = document.getElementById('meditation-video');
+  const audio = document.getElementById('meditation-audio');
+  const playPause = document.getElementById('play-pause');
+  const circleTimer = document.getElementById('circle-timer');
+  const timeBtns = Array.from(document.querySelectorAll('#time-select button'));
+  const themeBtns = Array.from(document.querySelectorAll('.sound-picker button'));
+  const timeDisplay = document.getElementById('time-display');
+  const progressCircle = document.getElementById('progress');
+  const tags = document.getElementById('tags');
 
-    <script>
-        const app = document.getElementById('app');
-        const video = document.querySelector('.vid-container video');
-        const audio = document.querySelector('.song');
-        const playButton = document.querySelector('.play');
-        const timeDisplay = document.querySelector('.time-display');
-        const timeButtons = document.querySelectorAll('#time-select button');
-        const soundButtons = document.querySelectorAll('.sound-picker button');
+  // These can be local or online URLs; adjust as needed
+  const sources = {
+    day: {
+      video: "video/day.mp4",
+      sound: "Sounds/day.mp3",
+      tag: "Day"
+    },
+    night: {
+      video: "video/night.mp4",
+      sound: "Sounds/night.mp3",
+      tag: "Night"
+    }
+  };
 
-        let duration = 600;
-        let currentTime = duration;
-        let isPlaying = false;
-        let timerInterval = null;
+  // States
+  let duration = 120; // default 2min
+  let interval = null;
+  let isPlaying = false;
+  let theme = 'day';
 
-        timeDisplay.textContent = '10:00';
-        soundButtons[0].classList.add('active');
-
-        function formatTime(seconds) {
-            const mins = Math.floor(seconds / 60);
-            const secs = seconds % 60;
-            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-        }
-
-        function updateDisplay() {
-            timeDisplay.textContent = formatTime(currentTime);
-        }
-
-        playButton.addEventListener('click', () => {
-            if (!isPlaying) {
-                audio.play();
-                video.play();
-                isPlaying = true;
-                playButton.innerHTML = `
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                        <path d="M144 479H48c-26.5 0-48-21.5-48-48V79c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48zm304-48V79c0-26.5-21.5-48-48-48h-96c-26.5 0-48 21.5-48 48v352c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48z"/>
-                    </svg>
-                `;
-                
-                timerInterval = setInterval(() => {
-                    currentTime--;
-                    updateDisplay();
-                    
-                    if (currentTime <= 0) {
-                        resetTimer();
-                    }
-                }, 1000);
-            } else {
-                audio.pause();
-                video.pause();
-                isPlaying = false;
-                clearInterval(timerInterval);
-                playButton.innerHTML = `
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                        <path d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"/>
-                    </svg>
-                `;
-            }
-        });
-
-        function resetTimer() {
-            clearInterval(timerInterval);
-            audio.pause();
-            video.pause();
-            audio.currentTime = 0;
-            video.currentTime = 0;
-            isPlaying = false;
-            currentTime = duration;
-            updateDisplay();
-            playButton.innerHTML = `
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                    <path d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"/>
-                </svg>
-            `;
-        }
-
-        timeButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                duration = parseInt(button.getAttribute('data-time'));
-                resetTimer();
-            });
-        });
-
-        soundButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const soundSrc = button.getAttribute('data-sound');
-                const videoSrc = button.getAttribute('data-video');
-                
-                soundButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-                
-                audio.src = soundSrc;
-                audio.load();
-                
-                video.src = videoSrc;
-                video.load();
-                
-                if (isPlaying) {
-                    audio.play();
-                    video.play();
-                }
-            });
-        });
-    </script>
+  function updateTimeDisplay(secs) {
+    const min = Math.floor(secs / 60);
+    const sec = secs % 60;
+    timeDisplay.textContent = `${min}:${sec < 10 ? '0' : ''}${sec}`;
+  }
+  function setProgress() {
+    const curr = audio.currentTime;
+    const val = Math.max(0, duration - curr);
+    updateTimeDisplay(Math.ceil(val));
+    // Animate SVG progress circle
+    const percent = Math.min(curr / duration, 1);
+    progressCircle.style.strokeDashoffset = 502 - percent * 502;
+  }
+  function reset() {
+    audio.currentTime = 0;
+    isPlaying = false;
+    playPause.innerHTML = '<i class="ri-play-fill"></i>';
+    clearInterval(interval);
+    updateTimeDisplay(duration);
+    progressCircle.style.strokeDashoffset = 502;
+  }
+  function play() {
+    if (!audio.src) return;
+    audio.play();
+    video.play();
+    isPlaying = true;
+    playPause.innerHTML = '<i class="ri-pause-fill"></i>';
+    interval = setInterval(() => {
+      if (audio.currentTime >= duration) {
+        audio.pause();
+        video.pause();
+        reset();
+      } else {
+        setProgress();
+      }
+    }, 200);
+  }
+  function pause() {
+    audio.pause();
+    video.pause();
+    isPlaying = false;
+    playPause.innerHTML = '<i class="ri-play-fill"></i>';
+    clearInterval(interval);
+  }
+  playPause.onclick = function() {
+    if (isPlaying) pause();
+    else play();
+  };
+  circleTimer.onclick = function(e) {
+    if (e.target.className.includes('play')) return;
+    if (isPlaying) pause();
+    else play();
+  };
+  // Duration select event
+  timeBtns.forEach((btn, idx) => {
+    btn.onclick = function() {
+      timeBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      duration = idx === 0 ? 120 : idx === 1 ? 300 : 600;
+      reset();
+    };
+  });
+  // Theme select event
+  themeBtns.forEach(btn => {
+    btn.onclick = function() {
+      themeBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      theme = btn.dataset.theme;
+      audio.src = sources[theme].sound;
+      video.querySelector('source').src = sources[theme].video;
+      video.load();
+      tags.textContent = `Now Playing: ${sources[theme].tag}`;
+      reset();
+    };
+  });
+  audio.onended = reset;
+  updateTimeDisplay(duration);
+  progressCircle.style.strokeDasharray = 502;
+  progressCircle.style.strokeDashoffset = 502;
+</script>
 </body>
 </html>
