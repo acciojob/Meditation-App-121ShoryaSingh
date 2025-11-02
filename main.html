@@ -129,11 +129,11 @@
 <body>
 <div id="app" class='app'>
   <div class="vid-container">
-    <video id="meditation-video" loop muted autoplay>
-      <source src="video/day.mp4" type="video/mp4">
+    <video id="meditation-video" loop muted autoplay playsinline>
+      <source src="https://player.vimeo.com/external/414530632.sd.mp4?s=8ad07b62f54d3dad5dae661437a5c2e8f4888a57&profile_id=164&oauth2_token_id=57447761" type="video/mp4">
     </video>
   </div>
-  <div id="time-select" class='time-display'>
+  <div id="time-select" class='time-display time-select'>
     <button id="smaller-mins" class="active">2 Minutes</button>
     <button id="medium-mins">5 Minutes</button>
     <button id="long-mins">10 Minutes</button>
@@ -150,7 +150,7 @@
       </svg>
       <button class="play" id="play-pause"><i class="ri-play-fill"></i></button>
     </div>
-    <audio id="meditation-audio" src="Sounds/day.mp3"></audio>
+    <audio id="meditation-audio" src="https://assets.mixkit.co/sfx/preview/mixkit-ocean-waves-relax-109.mp3"></audio>
     <div class="tags" id="tags">Now Playing: Day</div>
     <div class="time-display" id="time-display">2:00</div>
   </div>
@@ -167,21 +167,20 @@
   const progressCircle = document.getElementById('progress');
   const tags = document.getElementById('tags');
 
-  // These can be local or online URLs; adjust as needed
+  // Online URLs for day/night
   const sources = {
     day: {
-      video: "video/day.mp4",
-      sound: "Sounds/day.mp3",
+      video: "https://player.vimeo.com/external/414530632.sd.mp4?s=8ad07b62f54d3dad5dae661437a5c2e8f4888a57&profile_id=164&oauth2_token_id=57447761",   // Beach video
+      sound: "https://assets.mixkit.co/sfx/preview/mixkit-ocean-waves-relax-109.mp3",  // Ocean waves
       tag: "Day"
     },
     night: {
-      video: "video/night.mp4",
-      sound: "Sounds/night.mp3",
+      video: "https://player.vimeo.com/external/208416848.sd.mp4?s=11651b5978686971bb629e7cf014ef22c6069468&profile_id=164&oauth2_token_id=57447761", // Night stars
+      sound: "https://cdn.freesound.org/previews/458/458863_7037-lq.mp3", // Calm night ambient
       tag: "Night"
     }
   };
 
-  // States
   let duration = 120; // default 2min
   let interval = null;
   let isPlaying = false;
@@ -196,7 +195,6 @@
     const curr = audio.currentTime;
     const val = Math.max(0, duration - curr);
     updateTimeDisplay(Math.ceil(val));
-    // Animate SVG progress circle
     const percent = Math.min(curr / duration, 1);
     progressCircle.style.strokeDashoffset = 502 - percent * 502;
   }
@@ -240,32 +238,8 @@
     if (isPlaying) pause();
     else play();
   };
-  // Duration select event
   timeBtns.forEach((btn, idx) => {
     btn.onclick = function() {
       timeBtns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       duration = idx === 0 ? 120 : idx === 1 ? 300 : 600;
-      reset();
-    };
-  });
-  // Theme select event
-  themeBtns.forEach(btn => {
-    btn.onclick = function() {
-      themeBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      theme = btn.dataset.theme;
-      audio.src = sources[theme].sound;
-      video.querySelector('source').src = sources[theme].video;
-      video.load();
-      tags.textContent = `Now Playing: ${sources[theme].tag}`;
-      reset();
-    };
-  });
-  audio.onended = reset;
-  updateTimeDisplay(duration);
-  progressCircle.style.strokeDasharray = 502;
-  progressCircle.style.strokeDashoffset = 502;
-</script>
-</body>
-</html>
