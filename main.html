@@ -127,22 +127,22 @@
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css" rel="stylesheet">
 </head>
 <body>
-<div id="app">
+<div id="app" class='app'>
   <div class="vid-container">
     <video id="meditation-video" loop muted autoplay>
       <source src="video/day.mp4" type="video/mp4">
     </video>
   </div>
-  <div id="time-select">
+  <div id="time-select" class='time-display'>
     <button id="smaller-mins" class="active">2 Minutes</button>
     <button id="medium-mins">5 Minutes</button>
     <button id="long-mins">10 Minutes</button>
   </div>
-  <div class="sound-picker">
+  <div class="sound-picker" class='sound-picker'>
     <button data-theme="day" class="active" title="Day"><i class="ri-sun-line"></i></button>
     <button data-theme="night" title="Night"><i class="ri-moon-line"></i></button>
   </div>
-  <div class="player-container">
+  <div class="player-container" id='player-container'>
     <div class="circle-timer" id="circle-timer">
       <svg width="180" height="180">
         <circle id="progress" r="80" cx="90" cy="90" stroke="#337bfa" stroke-width="7" fill="none"
