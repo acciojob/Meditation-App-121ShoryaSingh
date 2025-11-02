@@ -133,11 +133,12 @@
       <source src="https://player.vimeo.com/external/414530632.sd.mp4?s=8ad07b62f54d3dad5dae661437a5c2e8f4888a57&profile_id=164&oauth2_token_id=57447761" type="video/mp4">
     </video>
   </div>
-  <div id="time-select" class='time-display time-select'>
-    <button id="smaller-mins" class="active">2 Minutes</button>
-    <button id="medium-mins">5 Minutes</button>
-    <button id="long-mins">10 Minutes</button>
-  </div>
+  <div id="time-select" class="time-display time-select">
+  <button id="smaller-mins" class="active">2 Minutes</button>
+  <button id="medium-mins">5 Minutes</button>
+  <button id="long-mins">10 Minutes</button>
+  <div id="inline-time">10:0</div>
+</div>
   <div class="sound-picker" class='sound-picker'>
     <button data-theme="day" class="active" title="Day"><i class="ri-sun-line"></i></button>
     <button data-theme="night" title="Night"><i class="ri-moon-line"></i></button>
@@ -207,8 +208,8 @@
     progressCircle.style.strokeDashoffset = 502;
   }
   function play() {
-    if (!audio.src) return;
-    audio.play();
+  if (!audio.src) return;
+  audio.play().then(() => {
     video.play();
     isPlaying = true;
     playPause.innerHTML = '<i class="ri-pause-fill"></i>';
@@ -221,7 +222,11 @@
         setProgress();
       }
     }, 200);
-  }
+  }).catch(err => {
+    console.error('Could not play audio:', err);
+  });
+}
+
   function pause() {
     audio.pause();
     video.pause();
